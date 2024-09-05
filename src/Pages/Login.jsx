@@ -1,16 +1,41 @@
-import React, { useState } from 'react';
+import { useContext, useState } from 'react';
 import { FaEye, FaEyeSlash, FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const Login = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
+    const { signInWithEmail, loginWtihGoogle } = useContext(AuthContext);
+
+    const [showPassword, setShowPassword] = useState(false);
     const handleTogglePassword = () => {
         setShowPassword(!showPassword);
     };
+
+    const handleForm = (event) => {
+        event.preventDefault();
+        const form = event.target;
+        const email = form.email.value;
+        const password = form.password.value;
+        const isAgreed = form.agree.checked;
+
+        if(isAgreed == true){
+            signInWithEmail(email, password)
+                .then((result) => {
+                    console.log(result);
+                    alert('User Login Successfully.')
+                })
+                .catch(error => {
+                    console.log(error);
+                    alert('User Login Not Successfully.')
+                })
+
+        }
+        else{
+            alert('Please agree to the Terms & Policy to continue.')
+        }
+    }
 
     return (
         <div className="flex flex-row h-screen">
@@ -22,36 +47,36 @@ const Login = () => {
                             <h2 className="text-3xl font-semibold text-start">Welcome Back</h2>
                             <p className='text-start text-gray-400'>Enter your Credentials to access your account</p>
                         </div>
-                        <input
-                            type="email"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
-                        />
-                        <div className="relative">
+                        <form onSubmit={handleForm}>
                             <input
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Enter your password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                type="email"
+                                placeholder="Enter your email"
                                 className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                                name='email'
                             />
-                            <button
-                                type="button"
-                                onClick={handleTogglePassword}
-                                className="absolute inset-y-0 right-0 bottom-3 flex items-center px-3 text-gray-600"
-                            >
-                                {showPassword ? <FaEyeSlash className='text-2xl' /> : <FaEye className='text-2xl' />}
-                            </button>
-                        </div>
-                        <label className="flex items-center mb-4">
-                            <input type="checkbox" className="mr-2" />
-                            I agree to the <span className='underline'> Terms & Policy</span>
-                        </label>
-                        <button className="w-full bg-black text-white p-3 rounded-lg">
-                            Sign In
-                        </button>
+                            <div className="relative">
+                                <input
+                                    type={showPassword ? 'text' : 'password'}
+                                    placeholder="Enter your password"
+                                    className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                                    name='password'
+                                />
+                                <button
+                                    type="button"
+                                    onClick={handleTogglePassword}
+                                    className="absolute inset-y-0 right-0 bottom-3 flex items-center px-3 text-gray-600"
+                                >
+                                    {showPassword ? <FaEyeSlash className='text-2xl' /> : <FaEye className='text-2xl' />}
+                                </button>
+                            </div>
+                            <label className="flex items-center mb-4">
+                                <input name='agree' type="checkbox" className="mr-2" />
+                                I agree to the <span className='underline'> Terms & Policy</span>
+                            </label>
+                            <input className="w-full text-center bg-black text-white p-3 rounded-lg"
+                                value={"Sign In"} type='submit'
+                            />
+                        </form>
 
                         {/* "Or" divider */}
                         <div className="relative flex py-4 items-center">

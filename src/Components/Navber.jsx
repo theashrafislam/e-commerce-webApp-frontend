@@ -1,8 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from "../assets/Logo.png"
+import { AuthContext } from '../Provider/AuthProvider';
 
 const Navbar = () => {
+    const {user} = useContext(AuthContext);
+    console.log(user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -10,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-white shadow-md z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Column 1: Logo */}
