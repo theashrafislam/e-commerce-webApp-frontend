@@ -3,8 +3,10 @@ import { FaEye, FaEyeSlash, FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,14 +16,28 @@ const Login = () => {
 
     return (
         <div className="flex flex-row h-screen">
-            {/* First Column: Login Form */}
+            {/* First Column: Signup Form */}
             <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-8">
                 <div className="w-full max-w-sm">
                     <div className="bg-gray-100 p-8 rounded-lg shadow-md">
                         <div className='mb-4'>
-                            <h2 className="text-3xl font-semibold text-start">Welcome Back</h2>
-                            <p className='text-start text-gray-400'>Enter your Credentials to access your account</p>
+                            <h2 className="text-3xl font-semibold text-start">Create an Account</h2>
+                            <p className='text-start text-gray-400'>Fill in the details to create your account</p>
                         </div>
+                        <input
+                            type="text"
+                            placeholder="First Name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Last Name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                        />
                         <input
                             type="email"
                             placeholder="Enter your email"
@@ -50,7 +66,7 @@ const Login = () => {
                             I agree to the <span className='underline'> Terms & Policy</span>
                         </label>
                         <button className="w-full bg-black text-white p-3 rounded-lg">
-                            Sign In
+                            Sign Up
                         </button>
 
                         {/* "Or" divider */}
@@ -62,24 +78,24 @@ const Login = () => {
 
                         {/* Google and Apple Login Buttons */}
                         <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
-                            <FcGoogle className="mr-2 text-2xl" /> Sign in with Google
+                            <FcGoogle className="mr-2 text-2xl" /> Sign up with Google
                         </button>
                         <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
-                            <FaApple className="mr-2 text-2xl" /> Sign in with Apple
+                            <FaApple className="mr-2 text-2xl" /> Sign up with Apple
                         </button>
 
-                        <p className='py-3 text-center'>Have an account? <Link className='text-blue-500' to={"/signup"}>Sign Up</Link></p>
+                        <p className='py-3 text-center'>Already have an account? <Link className='text-blue-500' to={"/login"}>Log In</Link></p>
                     </div>
                 </div>
             </div>
 
             {/* Second Column: Image and Text */}
-            <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-cover bg-center text-white p-8" style={{ backgroundImage: 'url(/login.png)' }}>
+            <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-cover bg-center text-white p-8" style={{ backgroundImage: 'url(/signup.png)' }}>
                 <img src="/furniflex.png" alt="Logo" className="mb-6" />
-                <p className="text-base text-gray-400 w-9/12 text-center">Discover a seamless shopping experience with our curated collection of products. From fashion to electronics, we bring quality.</p>
+                <p className="text-base text-gray-400 w-9/12 text-center">Join us today and enjoy the best shopping experience. Explore our extensive range of products and find what you need.</p>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default Signup;
