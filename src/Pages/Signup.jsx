@@ -21,23 +21,26 @@ const Signup = () => {
                 <div className="w-full max-w-sm">
                     <div className="bg-gray-100 p-8 rounded-lg shadow-md">
                         <div className='mb-4'>
-                            <h2 className="text-3xl font-semibold text-start">Create an Account</h2>
-                            <p className='text-start text-gray-400'>Fill in the details to create your account</p>
+                            <h5 className='font-bold text-center'>Welcome to</h5>
+                            <h2 className="text-center text-3xl font-bold">Furni<span className='text-[#1E99F5]'>Flex</span></h2>
+                            <p className='text-center text-gray-400'>Signup for purchase you desire products</p>
                         </div>
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
-                        />
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
-                        />
+                        <div className='flex justify-center items-center gap-2'>
+                            <input
+                                type="text"
+                                placeholder="First Name (Optional)"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                            />
+                            <input
+                                type="text"
+                                placeholder="Last Name (Optional)"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
+                            />
+                        </div>
                         <input
                             type="email"
                             placeholder="Enter your email"
@@ -90,9 +93,9 @@ const Signup = () => {
             </div>
 
             {/* Second Column: Image and Text */}
-            <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-cover bg-center text-white p-8" style={{ backgroundImage: 'url(/signup.png)' }}>
+            <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-cover bg-center text-white p-8" style={{ backgroundImage: 'url(/login.png)' }}>
                 <img src="/furniflex.png" alt="Logo" className="mb-6" />
-                <p className="text-base text-gray-400 w-9/12 text-center">Join us today and enjoy the best shopping experience. Explore our extensive range of products and find what you need.</p>
+                <p className="text-base text-gray-400 w-9/12 text-center">Discover a seamless shopping experience with our curated collection of products. From fashion to electronics, we bring quality.</p>
             </div>
         </div>
     );
