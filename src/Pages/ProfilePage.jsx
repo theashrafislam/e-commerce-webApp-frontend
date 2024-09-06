@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const Profile = () => {
   const { user, logOutUser } = useContext(AuthContext);
@@ -11,7 +12,7 @@ const Profile = () => {
     logOutUser()
       .then(result => {
         navigate('/');
-          alert('Log Out Successfully.')
+        alert('Log Out Successfully.')
       })
       .catch(error => {
         console.log(error);
@@ -20,7 +21,11 @@ const Profile = () => {
   }
 
   return (
+    <HelmetProvider>
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <Helmet>
+        <title>Manage Your Profile | E-commerce WebApp</title>
+      </Helmet>
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
         {/* Profile Picture */}
         <div className="flex justify-center mb-6">
@@ -42,7 +47,7 @@ const Profile = () => {
         {/* Logout Button */}
         <div className="mt-6">
           <button
-          onClick={handleLogOut}
+            onClick={handleLogOut}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
           >
             Logout
@@ -50,6 +55,7 @@ const Profile = () => {
         </div>
       </div>
     </div>
+    </HelmetProvider>
   );
 };
 

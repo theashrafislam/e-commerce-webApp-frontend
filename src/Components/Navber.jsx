@@ -26,8 +26,8 @@ const Navbar = () => {
   const fetchCartCount = async () => {
     try {
       if (user?.email) {
-        const response = await axios.get(`http://localhost:5000/carts?email=${user.email}`);
-        setCartCount(response.data.length); // Adjust based on your API response
+        const response = await axios.get(`https://e-commerce-web-app-backend.vercel.app/carts?email=${user.email}`);
+        setCartCount(response.data.length);
       }
     } catch (error) {
       console.error('Error fetching cart count:', error);
@@ -36,10 +36,8 @@ const Navbar = () => {
 
   useEffect(() => {
     if (user?.email) {
-      // Polling: Fetch cart count every 1 second (1000ms)
       const intervalId = setInterval(fetchCartCount, 1000);
       
-      // Clean up the interval when the component is unmounted or when user changes
       return () => clearInterval(intervalId);
     }
   }, [user]);

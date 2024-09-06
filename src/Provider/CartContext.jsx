@@ -11,7 +11,7 @@ export const CartProvider = ({ children }) => {
   // Function to update the cart
   const updateCart = async (userEmail) => {
     try {
-      const response = await axios.get(`http://localhost:5000/carts?email=${userEmail}`);
+      const response = await axios.get(`https://e-commerce-web-app-backend.vercel.app/carts?email=${userEmail}`);
       setCart(response.data); // Assuming response.data is the array of cart items
     } catch (error) {
       console.error('Error updating cart:', error);
