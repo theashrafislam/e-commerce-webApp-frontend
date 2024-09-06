@@ -6,7 +6,7 @@ import { AuthContext } from '../Provider/AuthProvider';
 
 const Signup = () => {
     const navigate = useNavigate();
-    const {createUserUsingEmailPass, logOutUser} = useContext(AuthContext);
+    const { createUserUsingEmailPass, logOutUser, loginWtihGoogle } = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -23,11 +23,11 @@ const Signup = () => {
         const password = form.password.value;
         const isAgreed = form.agree.checked;
         console.log(firstName, lastName, email, password, isAgreed);
-        if(isAgreed == true){
+        if (isAgreed == true) {
             createUserUsingEmailPass(email, password)
                 .then((result) => {
                     alert('User Create Successfully.');
-                    if(result){
+                    if (result) {
                         logOutUser()
                             .then(result => {
                                 navigate('/login')
@@ -41,9 +41,21 @@ const Signup = () => {
                 })
 
         }
-        else{
+        else {
             alert('Please agree to the Terms & Policy to continue.')
         }
+    }
+
+    const handlegoogle = () => {
+        loginWtihGoogle()
+            .then(result => {
+                console.log(result);
+                if(result){
+                    navigate("/");
+                    alert('Login Successfully.')
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     return (
@@ -111,7 +123,7 @@ const Signup = () => {
                         </div>
 
                         {/* Google and Apple Login Buttons */}
-                        <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
+                        <button onClick={handlegoogle} className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
                             <FcGoogle className="mr-2 text-2xl" /> Sign up with Google
                         </button>
                         <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">

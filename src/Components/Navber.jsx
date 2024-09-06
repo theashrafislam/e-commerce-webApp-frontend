@@ -1,14 +1,15 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import logo from "../assets/Logo.png"
+import logo from '../assets/Logo.png';
 import { AuthContext } from '../Provider/AuthProvider';
 import { CgProfile } from 'react-icons/cg';
 import { IoBagHandleOutline } from 'react-icons/io5';
+import axios from 'axios';
 
 const Navbar = () => {
   const { user, logOutUser } = useContext(AuthContext);
-  console.log(user);
   const [isOpen, setIsOpen] = useState(false);
+  const [cartCount, setCartCount] = useState(0);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -19,8 +20,29 @@ const Navbar = () => {
       .then(result => {
         console.log(result);
       })
-      .catch(error => console.log(error))
-  }
+      .catch(error => console.log(error));
+  };
+
+  const fetchCartCount = async () => {
+    try {
+      if (user?.email) {
+        const response = await axios.get(`http://localhost:5000/carts?email=${user.email}`);
+        setCartCount(response.data.length); // Adjust based on your API response
+      }
+    } catch (error) {
+      console.error('Error fetching cart count:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user?.email) {
+      // Polling: Fetch cart count every 1 second (1000ms)
+      const intervalId = setInterval(fetchCartCount, 1000);
+      
+      // Clean up the interval when the component is unmounted or when user changes
+      return () => clearInterval(intervalId);
+    }
+  }, [user]);
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -113,35 +135,45 @@ const Navbar = () => {
           {/* Column 3: Sign Up and Login (for Large Devices) */}
           <div className="hidden lg:flex items-center space-x-4">
             {
-              user ? <div className='flex items-center gap-5'>
-                <IoBagHandleOutline className='text-3xl' />
-                <NavLink to={"/profile"}>
-                  {
-                    user?.photoURL ? <img src={user.photoURL} alt={user.displayName} className='rounded-full w-9' /> : <CgProfile className='text-3xl' />
-                  }
-                </NavLink>
-              </div> : <div>
-                <NavLink
-                  to="/login"
-                  className={({ isActive }) =>
-                    isActive
-                      ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
-                  }
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  className={({ isActive }) =>
-                    isActive
-                      ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
-                      : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
-                  }
-                >
-                  Sign Up
-                </NavLink>
-              </div>
+              user ? (
+                <div className='flex items-center gap-5'>
+                  <NavLink to="/cart" className='flex items-center gap-1'>
+                    <IoBagHandleOutline className='text-3xl' />
+                    {cartCount > 0 && <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs'>{cartCount}</span>}
+                  </NavLink>
+                  <NavLink to="/profile">
+                    {
+                      user?.photoURL ? <img src={user.photoURL} alt={user.displayName} className='rounded-full w-9' /> : <CgProfile className='text-3xl' />
+                    }
+                  </NavLink>
+                  <button onClick={handleLogOut} className='text-white-700 hover:text-black bg-blue-500 font-bold px-4 py-2 rounded-lg'>
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <NavLink
+                    to="/login"
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
+                    }
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
+                        : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
+                    }
+                  >
+                    Sign Up
+                  </NavLink>
+                </div>
+              )
             }
           </div>
         </div>
@@ -207,34 +239,47 @@ const Navbar = () => {
               Blog
             </NavLink>
             {
-              user ? <div>
-                <NavLink className='block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'>
-                  <button onClick={handleLogOut}>Log Out</button>
-                </NavLink>
-              </div> : <div>
-                <NavLink
-                  to="/login"
-                  onClick={() => setIsOpen(false)}
-                  className={({ isActive }) =>
-                    isActive
-                      ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
-                      : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
-                  }
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  to="/signup"
-                  onClick={() => setIsOpen(false)}
-                  className={({ isActive }) =>
-                    isActive
-                      ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
-                      : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
-                  }
-                >
-                  Sign Up
-                </NavLink>
-              </div>
+              user ? (
+                <div>
+                  <NavLink to="/cart" className='flex items-center gap-1'>
+                    <IoBagHandleOutline className='text-3xl' />
+                    {cartCount > 0 && <span className='bg-red-500 text-white rounded-full px-2 py-1 text-xs'>{cartCount}</span>}
+                  </NavLink>
+                  <NavLink to="/profile">
+                    {
+                      user?.photoURL ? <img src={user.photoURL} alt={user.displayName} className='rounded-full w-9' /> : <CgProfile className='text-3xl' />
+                    }
+                  </NavLink>
+                  <button onClick={handleLogOut} className='text-white-700 hover:text-black bg-blue-500 font-bold px-4 py-2 rounded-lg'>
+                    Log Out
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <NavLink
+                    to="/login"
+                    onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
+                        : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
+                    }
+                  >
+                    Login
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
+                    onClick={() => setIsOpen(false)}
+                    className={({ isActive }) =>
+                      isActive
+                        ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
+                        : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
+                    }
+                  >
+                    Sign Up
+                  </NavLink>
+                </div>
+              )
             }
           </div>
         </div>

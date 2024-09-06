@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../Provider/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ const Profile = () => {
         {/* User Information */}
         <div className="text-center">
           <h2 className="text-2xl font-semibold text-gray-700">
-            {user?.displayName || 'John Doe'}
+            {user?.displayName || 'No Name'}
           </h2>
           <p className="text-gray-500">{user?.email || 'johndoe@example.com'}</p>
         </div>
