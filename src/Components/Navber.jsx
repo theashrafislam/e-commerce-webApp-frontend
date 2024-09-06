@@ -2,15 +2,25 @@ import { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import logo from "../assets/Logo.png"
 import { AuthContext } from '../Provider/AuthProvider';
+import { CgProfile } from 'react-icons/cg';
+import { IoBagHandleOutline } from 'react-icons/io5';
 
 const Navbar = () => {
-    const {user} = useContext(AuthContext);
-    console.log(user);
+  const { user, logOutUser } = useContext(AuthContext);
+  console.log(user);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+
+  const handleLogOut = () => {
+    logOutUser()
+      .then(result => {
+        console.log(result);
+      })
+      .catch(error => console.log(error))
+  }
 
   return (
     <nav className="bg-white shadow-md z-10">
@@ -102,26 +112,37 @@ const Navbar = () => {
 
           {/* Column 3: Sign Up and Login (for Large Devices) */}
           <div className="hidden lg:flex items-center space-x-4">
-            <NavLink
-              to="/login"
-              className={({ isActive }) =>
-                isActive
-                  ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
-              }
-            >
-              Login
-            </NavLink>
-            <NavLink
-              to="/signup"
-              className={({ isActive }) =>
-                isActive
-                  ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
-                  : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
-              }
-            >
-              Sign Up
-            </NavLink>
+            {
+              user ? <div className='flex items-center gap-5'>
+                <IoBagHandleOutline className='text-3xl' />
+                <NavLink to={"/profile"}>
+                  {
+                    user?.photoURL ? <img src={user.photoURL} alt={user.displayName} className='rounded-full w-9' /> : <CgProfile className='text-3xl' />
+                  }
+                </NavLink>
+              </div> : <div>
+                <NavLink
+                  to="/login"
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
+                  }
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'bg-gray-200 text-black px-4 py-2 rounded-lg'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-black px-4 py-2 rounded-lg'
+                  }
+                >
+                  Sign Up
+                </NavLink>
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -185,28 +206,36 @@ const Navbar = () => {
             >
               Blog
             </NavLink>
-            <NavLink
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                isActive
-                  ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
-                  : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
-              }
-            >
-              Login
-            </NavLink>
-            <NavLink
-              to="/signup"
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) =>
-                isActive
-                  ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
-                  : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
-              }
-            >
-              Sign Up
-            </NavLink>
+            {
+              user ? <div>
+                <NavLink className='block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'>
+                  <button onClick={handleLogOut}>Log Out</button>
+                </NavLink>
+              </div> : <div>
+                <NavLink
+                  to="/login"
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
+                      : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
+                  }
+                >
+                  Login
+                </NavLink>
+                <NavLink
+                  to="/signup"
+                  onClick={() => setIsOpen(false)}
+                  className={({ isActive }) =>
+                    isActive
+                      ? 'block bg-gray-200 text-black font-semibold px-3 py-2 rounded-lg'
+                      : 'block text-gray-700 hover:bg-gray-100 hover:text-black px-3 py-2 rounded-lg'
+                  }
+                >
+                  Sign Up
+                </NavLink>
+              </div>
+            }
           </div>
         </div>
       )}

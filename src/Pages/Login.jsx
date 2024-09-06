@@ -1,10 +1,11 @@
 import { useContext, useState } from 'react';
 import { FaEye, FaEyeSlash, FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 
 const Login = () => {
+    const navigate = useNavigate();
 
     const { signInWithEmail, loginWtihGoogle } = useContext(AuthContext);
 
@@ -23,8 +24,8 @@ const Login = () => {
         if(isAgreed == true){
             signInWithEmail(email, password)
                 .then((result) => {
-                    console.log(result);
                     alert('User Login Successfully.')
+                    navigate("/")
                 })
                 .catch(error => {
                     console.log(error);
@@ -35,6 +36,14 @@ const Login = () => {
         else{
             alert('Please agree to the Terms & Policy to continue.')
         }
+    }
+
+    const handlegoogle = () => {
+        loginWtihGoogle()
+            .then(result => {
+                console.log(result);
+            })
+            .catch(error => console.log(error))
     }
 
     return (
@@ -86,7 +95,7 @@ const Login = () => {
                         </div>
 
                         {/* Google and Apple Login Buttons */}
-                        <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
+                        <button onClick={handlegoogle} className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">
                             <FcGoogle className="mr-2 text-2xl" /> Sign in with Google
                         </button>
                         <button className="w-full p-3 rounded-lg border-2 flex items-center justify-center mb-4">

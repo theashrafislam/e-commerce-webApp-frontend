@@ -1,12 +1,12 @@
 import { useContext, useState } from 'react';
 import { FaEye, FaEyeSlash, FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Provider/AuthProvider';
 
 const Signup = () => {
-
-    const {createUserUsingEmailPass} = useContext(AuthContext);
+    const navigate = useNavigate();
+    const {createUserUsingEmailPass, logOutUser} = useContext(AuthContext);
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -26,8 +26,14 @@ const Signup = () => {
         if(isAgreed == true){
             createUserUsingEmailPass(email, password)
                 .then((result) => {
-                    console.log(result);
-                    alert('User Create Successfully.')
+                    alert('User Create Successfully.');
+                    if(result){
+                        logOutUser()
+                            .then(result => {
+                                navigate('/login')
+                            })
+                            .catch(error => console.log(error))
+                    }
                 })
                 .catch(error => {
                     console.log(error);
